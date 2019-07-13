@@ -16,8 +16,8 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     marginTop: 50,
-    padding: theme.spacing(3, 2),
-    width: 800
+    padding: theme.spacing(3, 2)
+    //  width: 800
   },
   paper: {
     padding: theme.spacing(2),
@@ -29,9 +29,6 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3, 2),
     width: 350,
     textAlign: "center"
-  },
-  button: {
-    margin: theme.spacing(1)
   }
 }));
 
@@ -40,7 +37,7 @@ function Dashboard() {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [name, setName] = useState("");
+  const [dogClicked, setDogClicked] = useState(false);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -51,23 +48,31 @@ function Dashboard() {
     });
   }, []);
 
+  const dogClick = function() {
+    setDogClicked(true);
+  };
+
+  if (dogClicked) {
+    return <Redirect to="/dogs" />;
+  }
+
   if (loading) {
     return <h2>Loading...</h2>;
   } else {
     if (loggedIn) {
       return (
         <div className={classes.root}>
-          <Paper className={classes.root}>
-            <Grid container spacing={3}>
+          <Grid container spacing={3}>
+            <Paper className={classes.root}>
               <Grid item xs={12}>
                 <h1>Welcome to the Agility homepage</h1>
               </Grid>
-              <Grid item xs={3} />
               <Grid item xs={3}>
                 <Button
                   variant="outlined"
                   color="primary"
                   className={classes.button}
+                  onClick={dogClick}
                 >
                   Add a dog
                 </Button>
@@ -81,16 +86,14 @@ function Dashboard() {
                   View Shows
                 </Button>
               </Grid>
-              <Grid item xs={3} />
-              <Grid item xs={3} />
               <Grid item xs={4}>
                 <Paper className={classes.imagePaper}>
-                  <img src={digby} width="300" />
+                  <img src={digby} width="300" alt="digby" />
                 </Paper>
               </Grid>
               <Grid item xs={4} />
-            </Grid>
-          </Paper>
+            </Paper>
+          </Grid>
         </div>
       );
     } else {

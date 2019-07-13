@@ -25,24 +25,23 @@ const useStyles = makeStyles(theme => ({
 function NavBar() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [name, setName] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [userID, setUserID] = useState(0);
   const [logout, setLogout] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [dogs, setDogs] = useState(false);
+  const [dashboard, setDashboard] = useState(false);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         setLoggedIn(true);
         setLogout(false);
+        setDashboard(false);
+        setDogs(false);
         setName(user.displayName);
         Axios.post("http://localhost:8080/login", {
           name: user.displayName,
           email: user.email
-        }).then(response => {
-          setIsAdmin(response.isAdmin);
-          setUserID(response.id);
-        });
+        }).then(response => {});
       } else {
         setLogout(true);
       }
@@ -59,13 +58,17 @@ function NavBar() {
     if (event === "logout") {
       setLogout(true);
     }
+
+    if (event === "dogs") {
+      setDogs(true);
+    }
+
+    if (event === "dashboard") {
+      setDashboard(true);
+    }
   };
 
   const classes = useStyles();
-
-  if (logout) {
-    return <Redirect to="/signout" />;
-  }
 
   return (
     <div className={classes.root}>
@@ -91,8 +94,12 @@ function NavBar() {
           >
             {loggedIn ? (
               <div>
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={() => handleClose("dashboard")}>
+                  Dashboard
+                </MenuItem>
+                <MenuItem onClick={() => handleClose("dogs")}>
+                  Your Dogs
+                </MenuItem>
                 <MenuItem onClick={() => handleClose("logout")}>
                   Logout
                 </MenuItem>
@@ -104,6 +111,9 @@ function NavBar() {
           {name}
         </Toolbar>
       </AppBar>
+      {dogs && <Redirect to="/dogs" />}
+      {dashboard && <Redirect to="/dashboard" />}
+      {logout && <Redirect to="/signout" />}
     </div>
   );
 }

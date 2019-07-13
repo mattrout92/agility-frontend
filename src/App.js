@@ -1,10 +1,10 @@
 import React from "react";
 import Firebase from "./components/FB";
-import firebase from "firebase";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Signout from "./components/Signout";
 import NavBar from "./components/AppBar";
+import Dogs from "./components/Dogs";
 import Grid from "@material-ui/core/Grid";
 import "./App.css";
 
@@ -28,6 +28,7 @@ class App extends React.Component {
               <Route exact path="/" component={Firebase} />
               <Route path="/signout" component={Signout} />
               <Route path="/dashboard" component={Dashboard} />
+              <Route path="/dogs" component={Dogs} />
             </Switch>
           </Grid>
         </Router>
