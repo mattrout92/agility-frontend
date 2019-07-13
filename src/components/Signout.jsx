@@ -1,14 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import firebase from "firebase";
 
-class Signout extends React.Component {
-  render() {
+function Signout() {
+  useEffect(() => {
     firebase.auth().signOut();
-    return (
-        <Redirect to="/" />
-    );
-  }
+  }, []);
+  return <Redirect to="/" />;
 }
 
 export default Signout;

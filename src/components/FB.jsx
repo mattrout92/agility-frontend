@@ -1,5 +1,5 @@
 // Import FirebaseAuth and firebase.
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FirebaseAuth } from "react-firebaseui";
 import firebase from "firebase";
 import { Redirect } from "react-router-dom";
@@ -23,46 +23,39 @@ const uiConfig = {
   // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
   signInSuccessUrl: "/dashboard",
   // We will display Google and Facebook as auth providers.
-  signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID, firebase.auth.FacebookAuthProvider.PROVIDER_ID, firebase.auth.EmailAuthProvider.PROVIDER_ID]
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    firebase.auth.EmailAuthProvider.PROVIDER_ID
+  ]
 };
 
-class Firebase extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loggedIn: false,
-      loading: true
-    };
+function Firebase() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-    this.componentWillMount = this.componentWillMount.bind(this);
-  }
-
-  componentWillMount() {
+  useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.setState({ loggedIn: true });
+        setLoggedIn(true);
       }
-      this.setState({ loading: false });
+      setLoading(false);
     });
-  }
+  }, []);
 
-  render() {
-    var loggedIn = this.state.loggedIn;
-
-    if (this.state.loading) {
-      return <h2>Loading...</h2>;
-    }
-    if (loggedIn) {
-      return <Redirect to="/dashboard" />;
-    }
-    return (
-      <div>
-        <h1>Phoenix Agility</h1>
-        <p>Please sign-in:</p>
-        <FirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
-      </div>
-    );
+  if (loading) {
+    return <h2>Loading...</h2>;
   }
+  if (loggedIn) {
+    return <Redirect to="/dashboard" />;
+  }
+  return (
+    <div>
+      <h1>Phoenix Agility</h1>
+      <p>Please sign-in:</p>
+      <FirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+    </div>
+  );
 }
 
 export default Firebase;
