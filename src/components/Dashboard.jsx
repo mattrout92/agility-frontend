@@ -16,13 +16,26 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     marginTop: 50,
-    padding: theme.spacing(3, 2)
-    //  width: 800
+    padding: theme.spacing(3, 2),
+    [theme.breakpoints.up("xs")]: {
+      width: 300
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: 500
+    },
+    [theme.breakpoints.up("md")]: {
+      width: 800
+    },
+    [theme.breakpoints.up("lg")]: {
+      width: 1200
+    },
+    [theme.breakpoints.up("xl")]: {
+      width: 1600
+    }
   },
   paper: {
     padding: theme.spacing(2),
     textAlign: "center",
-    color: theme.palette.text.secondary,
     minHeight: 50
   },
   imagePaper: {
@@ -67,31 +80,38 @@ function Dashboard() {
               <Grid item xs={12}>
                 <h1>Welcome to the Agility homepage</h1>
               </Grid>
-              <Grid item xs={3}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  className={classes.button}
-                  onClick={dogClick}
-                >
-                  Add a dog
-                </Button>
+              <Grid container spacing={3}>
+                <Grid item xl={3} sm={3} md={3} lg={3} xs={3} />
+                <Grid item xl={3} sm={3} md={3} lg={3} xs={3}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    className={classes.button}
+                    onClick={dogClick}
+                  >
+                    Add a dog
+                  </Button>
+                </Grid>
+                <Grid item xl={3} sm={3} md={3} lg={3} xs={3}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    className={classes.button}
+                  >
+                    View Shows
+                  </Button>
+                </Grid>
+                <Grid item xl={3} sm={3} md={3} lg={3} xs={3} />
               </Grid>
-              <Grid item xs={3}>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  className={classes.button}
-                >
-                  View Shows
-                </Button>
+              <Grid container spacing={3}>
+                <Grid item xl={4} sm={1} md={3} lg={4} xs={1} />
+                <Grid item xl={4} sm={4} md={4} lg={4} xs={4}>
+                  <Paper className={classes.imagePaper}>
+                    <img src={digby} width="300" alt="digby" />
+                  </Paper>
+                </Grid>
+                <Grid item xl={4} sm={4} md={3} lg={4} xs={4} />
               </Grid>
-              <Grid item xs={4}>
-                <Paper className={classes.imagePaper}>
-                  <img src={digby} width="300" alt="digby" />
-                </Paper>
-              </Grid>
-              <Grid item xs={4} />
             </Paper>
           </Grid>
         </div>

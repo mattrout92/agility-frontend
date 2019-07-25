@@ -17,7 +17,21 @@ const useStyles = makeStyles(theme => ({
   root: {
     marginTop: 50,
     padding: theme.spacing(3, 2),
-    width: 800
+    [theme.breakpoints.up("xs")]: {
+      width: 300
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: 500
+    },
+    [theme.breakpoints.up("md")]: {
+      width: 800
+    },
+    [theme.breakpoints.up("lg")]: {
+      width: 1200
+    },
+    [theme.breakpoints.up("xl")]: {
+      width: 1600
+    }
   },
   paper: {
     padding: theme.spacing(2),
@@ -96,10 +110,10 @@ function Dogs() {
       <div>
         <Paper className={classes.root}>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            <Grid item xl={12} sm={12} md={12} lg={12} xs={12}>
               <h1>Your Dogs</h1>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xl={12} sm={12} md={12} lg={12} xs={12}>
               <MaterialTable
                 title="Dog's Details"
                 columns={state.columns}
