@@ -5,6 +5,8 @@ import firebase from "firebase";
 import { Redirect } from "react-router-dom";
 
 // Configure Firebase.
+// DEV CONFIG: TODO: Switch to environment on go-live
+// No secure data is available using these keys
 const config = {
   apiKey: "AIzaSyBAXu8S-RHG5rYvP_bAZ_00ZpqpisN9HvI",
   authDomain: "agility-664d8.firebaseapp.com",

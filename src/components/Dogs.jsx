@@ -78,27 +78,29 @@ function Dogs() {
   var classes = useStyles();
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        setLoggedIn(true);
-        Axios.post("http://localhost:8080/login", {
-          name: user.displayName,
-          email: user.email
-        }).then(response => {
-          setUserID(response.data.id);
+    if (loading) {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          setLoggedIn(true);
+          Axios.post("http://localhost:8080/login", {
+            name: user.displayName,
+            email: user.email
+          }).then(response => {
+            setUserID(response.data.id);
 
-          Axios.get(
-            "http://localhost:8080/dogs?user_id=" + response.data.id
-          ).then(response => {
-            let data = response.data;
-            if (data != null) {
-              setState({ ...state, data });
-            }
+            Axios.get(
+              "http://localhost:8080/dogs?user_id=" + response.data.id
+            ).then(response => {
+              let data = response.data;
+              if (data != null) {
+                setState({ ...state, data });
+              }
+            });
           });
-        });
-      }
-      setLoading(false);
-    });
+        }
+        setLoading(false);
+      });
+    }
   }, [state]);
 
   if (loading) {
