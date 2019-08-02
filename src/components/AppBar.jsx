@@ -28,6 +28,7 @@ function NavBar() {
   const [logout, setLogout] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [dogs, setDogs] = useState(false);
+  const [shows, setShows] = useState(false);
   const [dashboard, setDashboard] = useState(false);
 
   useEffect(() => {
@@ -66,6 +67,10 @@ function NavBar() {
     if (event === "dashboard") {
       setDashboard(true);
     }
+
+    if (event === "shows") {
+      setShows(true);
+    }
   };
 
   const classes = useStyles();
@@ -100,6 +105,9 @@ function NavBar() {
                 <MenuItem onClick={() => handleClose("dogs")}>
                   Your Dogs
                 </MenuItem>
+                <MenuItem onClick={() => handleClose("shows")}>
+                  Enter a Show
+                </MenuItem>
                 <MenuItem onClick={() => handleClose("logout")}>
                   Logout
                 </MenuItem>
@@ -114,6 +122,7 @@ function NavBar() {
       {dogs && <Redirect to="/dogs" />}
       {dashboard && <Redirect to="/dashboard" />}
       {logout && <Redirect to="/signout" />}
+      {shows && <Redirect to="/shows" />}
     </div>
   );
 }

@@ -46,10 +46,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Dogs() {
-  const [loggedIn, setLoggedIn] = useState(false);
+function Dogs(props) {
   const [loading, setLoading] = useState(true);
-  const [userID, setUserID] = useState(0);
 
   const [state, setState] = useState({
     columns: [
@@ -79,35 +77,23 @@ function Dogs() {
 
   useEffect(() => {
     if (loading) {
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          setLoggedIn(true);
-          Axios.post("http://localhost:8080/login", {
-            name: user.displayName,
-            email: user.email
-          }).then(response => {
-            setUserID(response.data.id);
-
-            Axios.get(
-              "http://localhost:8080/dogs?user_id=" + response.data.id
-            ).then(response => {
-              let data = response.data;
-              if (data != null) {
-                setState({ ...state, data });
-              }
-            });
-          });
+      Axios.get("http://localhost:8080/dogs?user_id=" + props.userID).then(
+        response => {
+          let data = response.data;
+          if (data != null) {
+            setState({ ...state, data });
+          }
         }
-        setLoading(false);
-      });
+      );
     }
+    setLoading(false);
   }, [state]);
 
   if (loading) {
     return <h2>Loading...</h2>;
   }
 
-  if (loggedIn) {
+  if (props.loggedIn) {
     return (
       <div>
         <Paper className={classes.root}>
@@ -137,13 +123,13 @@ function Dogs() {
                       setTimeout(() => {
                         resolve();
                         const data = [...state.data];
-                        newData.user_id = userID;
+                        newData.user_id = props.userID;
                         Axios.post("http://localhost:8080/dogs", newData).then(
                           response => {
                             newData.id = response.data.id;
                             data.push(newData);
                             setState({ ...state, data });
-                            newData.user_id = userID;
+                            newData.user_id = props.userID;
                           }
                         );
                       }, 600);

@@ -45,21 +45,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Dashboard() {
+function Dashboard(props) {
   var classes = useStyles();
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [dogClicked, setDogClicked] = useState(false);
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        setLoggedIn(true);
-      }
-      setLoading(false);
-    });
-  }, []);
+  const [showsClicked, setShowsClicked] = useState(false);
 
   const dogClick = function() {
     setDogClicked(true);
@@ -69,56 +60,61 @@ function Dashboard() {
     return <Redirect to="/dogs" />;
   }
 
-  if (loading) {
-    return <h2>Loading...</h2>;
+  const showClick = function() {
+    setShowsClicked(true);
+  };
+
+  if (showsClicked) {
+    return <Redirect to="/shows" />;
+  }
+
+  if (props.loggedIn) {
+    return (
+      <div className={classes.root}>
+        <Grid container spacing={3}>
+          <Paper className={classes.root}>
+            <Grid item xs={12}>
+              <h1>Welcome to the Agility homepage</h1>
+            </Grid>
+            <Grid container spacing={3}>
+              <Grid item xl={3} sm={3} md={3} lg={3} xs={3} />
+              <Grid item xl={3} sm={3} md={3} lg={3} xs={3}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  className={classes.button}
+                  onClick={dogClick}
+                >
+                  Add a dog
+                </Button>
+              </Grid>
+              <Grid item xl={3} sm={3} md={3} lg={3} xs={3}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  className={classes.button}
+                  onClick={showClick}
+                >
+                  View Shows
+                </Button>
+              </Grid>
+              <Grid item xl={3} sm={3} md={3} lg={3} xs={3} />
+            </Grid>
+            <Grid container spacing={3}>
+              <Grid item xl={4} sm={1} md={3} lg={4} xs={1} />
+              <Grid item xl={4} sm={4} md={4} lg={4} xs={4}>
+                <Paper className={classes.imagePaper}>
+                  <img src={digby} width="300" alt="digby" />
+                </Paper>
+              </Grid>
+              <Grid item xl={4} sm={4} md={3} lg={4} xs={4} />
+            </Grid>
+          </Paper>
+        </Grid>
+      </div>
+    );
   } else {
-    if (loggedIn) {
-      return (
-        <div className={classes.root}>
-          <Grid container spacing={3}>
-            <Paper className={classes.root}>
-              <Grid item xs={12}>
-                <h1>Welcome to the Agility homepage</h1>
-              </Grid>
-              <Grid container spacing={3}>
-                <Grid item xl={3} sm={3} md={3} lg={3} xs={3} />
-                <Grid item xl={3} sm={3} md={3} lg={3} xs={3}>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    className={classes.button}
-                    onClick={dogClick}
-                  >
-                    Add a dog
-                  </Button>
-                </Grid>
-                <Grid item xl={3} sm={3} md={3} lg={3} xs={3}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    className={classes.button}
-                  >
-                    View Shows
-                  </Button>
-                </Grid>
-                <Grid item xl={3} sm={3} md={3} lg={3} xs={3} />
-              </Grid>
-              <Grid container spacing={3}>
-                <Grid item xl={4} sm={1} md={3} lg={4} xs={1} />
-                <Grid item xl={4} sm={4} md={4} lg={4} xs={4}>
-                  <Paper className={classes.imagePaper}>
-                    <img src={digby} width="300" alt="digby" />
-                  </Paper>
-                </Grid>
-                <Grid item xl={4} sm={4} md={3} lg={4} xs={4} />
-              </Grid>
-            </Paper>
-          </Grid>
-        </div>
-      );
-    } else {
-      return <Redirect to="/" />;
-    }
+    return <Redirect to="/" />;
   }
 }
 export default Dashboard;
