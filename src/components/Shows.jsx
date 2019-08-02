@@ -5,6 +5,11 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import MaterialTable from "material-table";
 import Axios from "axios";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -48,12 +53,31 @@ const useStyles = makeStyles(theme => ({
 export default function Shows(props) {
   var classes = useStyles();
 
+  const [shows, setShows] = useState([]);
+
   useEffect(() => {
-      console.log(props.loggedIn)
     Axios.get("http://localhost:8080/shows").then(response => {
       console.log(response.data);
+      setShows(response.data);
     });
   }, []);
+
+  const displayShows = shows.map(item => {
+    return (
+      <ExpansionPanel>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography className={classes.heading}>
+            {item.date} - {item.location} (Judging starts: {item.judging_from})
+          </Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails />
+      </ExpansionPanel>
+    );
+  });
 
   if (!props.loggedIn) {
     return <Redirect to="/" />;
@@ -66,7 +90,9 @@ export default function Shows(props) {
           <Grid item xl={12} sm={12} md={12} lg={12} xs={12}>
             <h1>Enter a Show</h1>
           </Grid>
-          <Grid item xl={12} sm={12} md={12} lg={12} xs={12} />
+          <Grid item xl={12} sm={12} md={12} lg={12} xs={12}>
+            {shows.length > 0 && displayShows}
+          </Grid>
         </Grid>
       </Paper>
     </div>
